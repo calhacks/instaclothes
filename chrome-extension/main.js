@@ -12,20 +12,35 @@ const replaceImage = (data) => {
 
 const sendPostsToServer = (domain, values) => {
   console.log('data', values);
-  if (domain === 'instagram' || domain === 'facebook') {
-    const url = values[0].image
-    const reqPromise = $.ajax(`http://localhost:3000/i?url=${url}&happy=0.99&sad=0.5`, {
+  values.forEach(v => {
+    const url = v.image;
+    const happy = Math.floor(Math.random() * 100)
+    const sad = Math.floor(Math.random() * 100)
+    console.log('v', v)
+    console.log('happy', happy)
+    console.log('sad', sad)
+    $.ajax(`http://localhost:3000/i?url=${url}&happy=${happy}&sad=${sad}`, {
       method: 'GET',
     })
-    reqPromise
-      .done(oldAndNew=> {
-        console.log('result', oldAndNew)
-        replaceImage(oldAndNew)
-      })
-      .fail(error => {
-        console.error(error)
-      })
-  }
+    .done(oldAndNew=> {
+      console.log('result', oldAndNew)
+      replaceImage(oldAndNew)
+    })
+    .fail(error => {
+      console.error(error)
+    })
+  })
+  // const reqPromise = $.ajax(`http://localhost:3000/i?url=${url}&happy=0.99&sad=0.5`, {
+  //   method: 'GET',
+  // })
+  // reqPromise
+  //   .done(oldAndNew=> {
+  //     console.log('result', oldAndNew)
+  //     replaceImage(oldAndNew)
+  //   })
+  //   .fail(error => {
+  //     console.error(error)
+  //   })
 }
 
 const chromeExecuteScraping = () => {

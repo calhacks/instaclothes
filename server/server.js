@@ -104,14 +104,16 @@ app.get('/i', (req, res)  => {
     var url = req.query.url
     var happy = req.query.happy
     var sad = req.query.sad
-
+  console.log('happy', happy)
+  console.log('sad', sad)
 
 
     console.log(url)
     cloudinary.uploader.upload(url, function(result) {
         //res.cloudinary.com/university-of-california-berkeley/image/upload/v1498409624/lbqjucnb0wenmbd8skiw.jpg
-        happy = Math.floor(Number(happy) * 100)
-        sad = Math.floor(Number(sad) * 100)
+        happy = Number(happy)
+        sad = Number(sad)
+        console.log('RESULT', result)
         return_url = result['url'].replace('upload/', `upload/e_cartoonify/e_red:${sad}/e_blue:${happy}/`)
         res.json({'old': url, 'url': return_url})
     });
