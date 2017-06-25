@@ -1,0 +1,14 @@
+{
+  "name": "Swagstagram",
+  "manifest_version": 2,
+  "description": "Machine Learning to buy the clothes on your Instagram feed",
+  "version": "0.0.1",
+  "permissions": [
+    "activeTab",
+    "background"
+  ],
+  "browser_action": {
+    "default_title": "Swagstagram",
+    "default_popup": "main.html"
+  }
+}
