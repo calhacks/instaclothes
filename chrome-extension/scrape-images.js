@@ -63,5 +63,21 @@ const scrapeFacebook = () => {
   return data;
 }
 
-return scrapeInstagram();
+// Find out what page we're on and call the correct scraping function
+const domain = window.location.href;
+
+if (domain.includes('instagram')) {
+  return {
+    domain: 'instagram',
+    data: scrapeInstagram(),
+  }
+}
+
+if (domain.includes('facebook')) {
+  return {
+    domain: 'facebook',
+    data: scrapeFacebook()
+  }
+}
+
 })()
