@@ -1,5 +1,7 @@
+const url = require('url')
 
 const cloudinary = require('cloudinary');
+
 cloudinary.config({
   cloud_name: 'university-of-california-berkeley',
   api_key: '176617747466324',
@@ -24,6 +26,41 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+const makepretty = (allTheThings) => {
+  const allPromises = allTheThings.map(data => {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(url, function(result) {
+        happy = Math.floor(Number(happy) * 100)
+        sad = Math.floor(Number(sad) * 100)
+        return_url = result.url.replace('upload/', `upload/e_cartoonify/e_red:${sad}/e_blue:${happy}/`)
+        resolve({
+          old: url,
+          new: return_url,
+        })
+      });
+    })
+  })
+
+  const finalOutputToClient = Promise.all(allPromises).then(data => data)
+}
+
+
+const convertImages = (allSentiments) => {
+  const finalData = allSentiments.map(sentiment => {
+    const url = sentiment.url
+    const sadness = sentiment[0].document_tone.tone_categories[0].tones[0].sadness
+    const happiness = sentiment[0].document_tone.tone_categories[0].tones[0].happiness
+    const final =  {
+      url,
+      sadness,
+      happiness,
+    }
+    return final
+  })
+
+  return makepretty(finalData);
+}
+
 const handleImageUpload = (posts) => {
   const acc = {}
   const allPromises = posts.map((post) => {
@@ -37,33 +74,31 @@ const handleImageUpload = (posts) => {
       toneAnalyzer.tone(params, (err, sentiment) => {
         if (err) {
           console.log(err, 'Error')
+          reject()
         }
         else {
-          resolve(sentiment)
+          console.log("API COMPLETED", post)
+          return resolve({
+            url: post.image,
+            sentiment,
+          })
         }
       })
     })
   })
 
-  const allSentiments = Promise.all(allPromises).then(sentiments => { return sentiments })
-}
+  /*
+   * [{ image: string, sentiment: [ ... ] }]
+  */
+  console.log(allPromises)
+  const allSentiments = Promise.all(allPromises).then(sentiments => sentiments);
 
-app.get('/i', (req, res)  => {
-  if (req.query) {
-    let url = req.query.url
-    let happy = req.query.happy
-    let sad = req.query.sad
-    cloudinary.uploader.upload(url, function(result) {
-      happy = Math.floor(Number(happy) * 100)
-      sad = Math.floor(Number(sad) * 100)
-      return_url = result.url.replace('upload/', `upload/e_cartoonify/e_red:${sad}/e_blue:${happy}/`)
-      res.json({
-        'old': url,
-        'url': return_url
-      })
-    });
-  }
-})
+  console.log('allSentiments', allSentiments);
+
+  const finalImageAndSentiment = convertImages(allSentiments)
+
+  res.json(finalImageAndSentiment)
+}
 
 app.post('/instagram', (req, res) => {
   if (req.body) {
