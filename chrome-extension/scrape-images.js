@@ -6,7 +6,10 @@ const scrapeInstagram = () => {
   // Each post is an article tag, get all of them
   let posts = [];
   document.querySelectorAll("article").forEach(post => {
+    // Buttons titled "load more comments"
     let loadMoreComments = post.querySelector("div>ul>li>button")
+
+    // Links titled "...more"
     let expandSingleComments = post.querySelectorAll("div>ul>li>span>a[href='#']")
 
     if (loadMoreComments) {
@@ -17,10 +20,14 @@ const scrapeInstagram = () => {
       expandSingleComments.forEach(expand => expand.click())
     }
 
+    // Instagram posts
     let image = post.querySelector("img[id^=pImage]")
 
+    // Comments might contain hastags which are links themselves to that topic
+    // Formatted as an array of strings without any user information
     let comments = Array.from(post.querySelectorAll("div>ul>li>span")).map(el => el.innerText)
 
+    // Only send results for posts with a valid image src and some comments
     if (image && comments.length) {
       posts.push({
         image: image.src,

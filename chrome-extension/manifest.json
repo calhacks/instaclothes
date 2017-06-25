@@ -6,7 +6,8 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "https://facebook.com/*"
+    "https://facebook.com/*",
+    "https://instagram.com/*"
   ],
   "browser_action": {
     "default_title": "Image Feels",
