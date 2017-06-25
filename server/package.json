@@ -1,8 +1,11 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon server.js"
+  },
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",

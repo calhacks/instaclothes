@@ -6,7 +6,7 @@ const tonePassword = process.env.TONE_PASSWORD
 const toneAnalyzer = new ToneAnalyzer({
   username: toneUsername,
   password: tonePassword,
-  version_date: '2015-05-19',
+  version_date: '2017-05-19',
 })
 
 const express = require('express')
@@ -29,7 +29,7 @@ const handleImageUpload = (posts) => {
         console.log(err, 'Error')
       }
       else {
-        console.log('sentiment')
+        acc[post.image] = sentiment
       }
     })
   }
