@@ -4,9 +4,15 @@
   "description": "Machine Learning to buy the clothes on your Instagram feed",
   "version": "0.0.1",
   "permissions": [
-    "activeTab",
-    "background"
+    "tabs", "https://www.instagram.com/*"
   ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/*"],
+      "js": ["scrape-images.js"]
+    }
+  ],
+  
   "browser_action": {
     "default_title": "Swagstagram",
     "default_popup": "main.html"
