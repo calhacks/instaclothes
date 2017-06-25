@@ -1,14 +1,22 @@
 {
-  "name": "Swagstagram",
+  "name": "The One Where They Used Comment Sentiment Analysis to Modify and Image",
   "manifest_version": 2,
-  "description": "Machine Learning to buy the clothes on your Instagram feed",
+  "description": "",
   "version": "0.0.1",
   "permissions": [
     "activeTab",
-    "background"
+    "tabs",
+    "https://facebook.com/*",
+    "https://instagram.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram/*", "https://facebook.com/*"],
+      "js": ["jquery.min.js"]
+    }
   ],
   "browser_action": {
-    "default_title": "Swagstagram",
+    "default_title": "Image Feels",
     "default_popup": "main.html"
   }
 }
