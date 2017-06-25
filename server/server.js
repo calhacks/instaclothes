@@ -1,7 +1,9 @@
 const ToneAnalyzer = require('watson-developer-cloud/tone-analyzer/v3')
 
-const toneUsername = process.env.TONE_USERNAME
-const tonePassword = process.env.TONE_PASSWORD
+const toneUsername ="618eb3bf-d72c-408a-b43a-92d071fb6742"
+const tonePassword = "QwwXWENcAwje"
+
+
 
 const toneAnalyzer = new ToneAnalyzer({
   username: toneUsername,
@@ -42,6 +44,25 @@ const handleImageUpload = (posts) => {
   })
 }
 
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'university-of-california-berkeley', 
+  api_key: '176617747466324', 
+  api_secret: 's9NzxWN0_VSb9eWWE6qjThQBYIA' 
+});
+
+
+app.get('/i', (req, res)  => {
+  var url = req.query.url
+    console.log(url)
+    cloudinary.uploader.upload(url, function(result) { 
+        //res.cloudinary.com/university-of-california-berkeley/image/upload/v1498409624/lbqjucnb0wenmbd8skiw.jpg
+        return_url = result['url'].replace('upload/', 'upload/e_oil_paint:100/')
+        res.json({'url': return_url})
+    });
+
+})
 
 app.post('/instagram', (req, res) => {
   if (req.body) {
