@@ -17,25 +17,30 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const handleImageUpload = (posts) => {
-  const sentiments = posts.reduce((acc, post) => {
+  const acc = {}
+  const allPromises = posts.map((post) => {
     const comments = post.comments.join('. ')
     const params = {
       text: comments,
       tone: 'emotion',
     }
 
-    toneAnalyzer.tone(params, (err, sentiment) => {
-      if (err) {
-        console.log(err, 'Error')
-      }
-      else {
-        acc[post.image] = sentiment
-      }
+    return new Promise((resolve, reject) => {
+      toneAnalyzer.tone(params, (err, sentiment) => {
+        if (err) {
+          console.log(err, 'Error')
+        }
+        else {
+          resolve(sentiment)
+        }
+      })
     })
-  }
-  ,{})
+  })
 
-  console.log('Sentiments', sentiments)
+  return Promise.all(allPromises).then(allSentiments => {
+    console.log(JSON.stringify(allSentiments))
+    return allSentiments
+  })
 }
 
 
