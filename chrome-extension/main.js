@@ -1,16 +1,26 @@
+const replaceImage = (data) => {
+  chrome.tabs.executeScript({
+    code: 'var data = ' + JSON.stringify(data),
+  }, function() {
+    chrome.tabs.executeScript({
+      file: 'replace-image.js'
+    })
+  })
+
+
+}
+
 const sendPostsToServer = (domain, values) => {
   console.log('data', values);
-
   if (domain === 'instagram' || domain === 'facebook') {
-    const reqPromise = $.ajax(`http://localhost:3000/${domain}`, {
-      method: 'POST',
-      data: {
-        results: values,
-      },
+    const url = values[0].image
+    const reqPromise = $.ajax(`http://localhost:3000/i?url=${url}&happy=0.99&sad=0.5`, {
+      method: 'GET',
     })
     reqPromise
-      .done(newImages => {
-        console.log('result', newImages)
+      .done(oldAndNew=> {
+        console.log('result', oldAndNew)
+        replaceImage(oldAndNew)
       })
       .fail(error => {
         console.error(error)

@@ -45,7 +45,7 @@ const makepretty = (allTheThings) => {
 }
 
 
-const convertImages = (allSentiments) => {
+const convertImages = (allSeniments) => {
   const finalData = allSentiments.map(sentiment => {
     const url = sentiment.url
     const sadness = sentiment[0].document_tone.tone_categories[0].tones[0].sadness
@@ -99,7 +99,24 @@ const handleImageUpload = (posts) => {
 
   res.json(finalImageAndSentiment)
 }
+app.get('/i', (req, res)  => {
 
+    var url = req.query.url
+    var happy = req.query.happy
+    var sad = req.query.sad
+
+
+
+    console.log(url)
+    cloudinary.uploader.upload(url, function(result) {
+        //res.cloudinary.com/university-of-california-berkeley/image/upload/v1498409624/lbqjucnb0wenmbd8skiw.jpg
+        happy = Math.floor(Number(happy) * 100)
+        sad = Math.floor(Number(sad) * 100)
+        return_url = result['url'].replace('upload/', `upload/e_cartoonify/e_red:${sad}/e_blue:${happy}/`)
+        res.json({'old': url, 'url': return_url})
+    });
+
+})
 app.post('/instagram', (req, res) => {
   if (req.body) {
     const posts = req.body.results
