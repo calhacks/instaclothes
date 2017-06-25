@@ -9,6 +9,12 @@
     "https://facebook.com/*",
     "https://instagram.com/*"
   ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram/*", "https://facebook.com/*"],
+      "js": ["jquery.min.js"]
+    }
+  ],
   "browser_action": {
     "default_title": "Image Feels",
     "default_popup": "main.html"
