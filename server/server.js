@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const handleImageUpload = (posts) => {
   const acc = {}
   const allPromises = posts.map((post) => {
-    const comments = post.comments.join('. ')
+    const comments = post.comments.join('.').replace('.',  '').replace(' . ', ' ')
     const params = {
       text: comments,
       tone: 'emotion',
@@ -38,7 +38,6 @@ const handleImageUpload = (posts) => {
   })
 
   return Promise.all(allPromises).then(allSentiments => {
-    console.log(JSON.stringify(allSentiments))
     return allSentiments
   })
 }
