@@ -107,14 +107,14 @@ app.get('/i', (req, res)  => {
   console.log('happy', happy)
   console.log('sad', sad)
 
-
     console.log(url)
     cloudinary.uploader.upload(url, function(result) {
         //res.cloudinary.com/university-of-california-berkeley/image/upload/v1498409624/lbqjucnb0wenmbd8skiw.jpg
         happy = Number(happy)
         sad = Number(sad)
         console.log('RESULT', result)
-        return_url = result['url'].replace('upload/', `upload/e_cartoonify/e_red:${sad}/e_blue:${happy}/`)
+        const effect = (happy/sad)/2
+        return_url = result['url'].replace('upload/', `upload/e_cartoonify:${effect}/e_red:${sad}/e_blue:${happy}/`)
         res.json({'old': url, 'url': return_url})
     });
 
@@ -134,3 +134,4 @@ app.post('/facebook', (req, res) => {
 })
 
 app.listen(3000, () => console.log('Server Started! .... http://localhost:3000/'))
+
